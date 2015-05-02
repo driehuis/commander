@@ -1,0 +1,25 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    activemodel (3.0.20)
+      activesupport (= 3.0.20)
+      builder (~> 2.1.2)
+      i18n (~> 0.5.0)
+    activeresource (3.0.20)
+      activemodel (= 3.0.20)
+      activesupport (= 3.0.20)
+    activesupport (3.0.20)
+    builder (2.1.2)
+    daemon-kit (0.3.2)
+      eventmachine (>= 0.12.10)
+      thor
+    eventmachine (1.0.7)
+    i18n (0.5.4)
+    thor (0.19.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activeresource (~> 3.0.5)
+  daemon-kit
