@@ -1,24 +1,31 @@
 class Commander < ActiveResource::Base
-  
+
   def self.running
     @running ||= []
   end
-  
+
+  def self.command_shorten(command)
+    desc = command.dup
+    desc.gsub!('/usr/bin/pfexec ', '')
+    desc.gsub!(/rsync .* ([\w@.]+:\/)/) { 'rsync ' + $1 }
+    desc.gsub!(/\s+/, ' ')
+    desc = desc.length > 60 ? desc[0,56] + "..." : desc
+  end
+
   def self.run(config)
     self.site = config['url']
     self.user = config['user']
     self.password = config['pass']
     self.element_name = "command"
     self.format = :xml
-    
+
     begin
       self.find(:all, :conditions => { :exitstatus => nil}).each do | item |
         unless running.include? item.id
           running.push item.id
           pid = Process.fork {
             Process.fork {
-              desc = item.command.length > 60 ? item.command[0,56] + "..." : item.command
-              $0 = "commander (worker #{item.id}) #{desc}"
+              $0 = "commander (worker #{item.id}) #{command_shorten item.command}"
               output=`#{item.command}`
               item.exitstatus = $?.exitstatus
               item.output = output
